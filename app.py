@@ -80,7 +80,6 @@ def _get_secret(key: str, default: str = "") -> str:
 
 
 SPREADSHEET_ID = _get_secret("SPREADSHEET_ID")
-SERVICE_ACCOUNT_JSON = _get_secret("GOOGLE_SERVICE_ACCOUNT_JSON", "service_account.json")
 GEMINI_API_KEY = _get_secret("GEMINI_API_KEY")
 
 TAB_NAME = "修正版全回答"
@@ -167,11 +166,22 @@ def connect_to_sheets():
     if not SPREADSHEET_ID:
         raise ValueError("環境変数 SPREADSHEET_ID が設定されていません。")
 
-    json_path = Path(SERVICE_ACCOUNT_JSON)
+    # Streamlit Secrets から認証情報を取得（優先）
+    try:
+        sa_dict = dict(st.secrets["GOOGLE_SERVICE_ACCOUNT"])
+        client = gspread.service_account_from_dict(sa_dict)
+        return client.open_by_key(SPREADSHEET_ID)
+    except KeyError:
+        pass  # Secrets にない場合はファイルにフォールバック
+
+    # ローカル開発用: service_account.json ファイルから読み込み
+    sa_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "service_account.json")
+    json_path = Path(sa_json)
     if not json_path.exists():
         raise FileNotFoundError(
             f"サービスアカウントファイルが見つかりません: {json_path}\n"
-            "環境変数 GOOGLE_SERVICE_ACCOUNT_JSON でパスを指定してください。"
+            "Streamlit Secrets に GOOGLE_SERVICE_ACCOUNT を設定するか、\n"
+            "環境変数 GOOGLE_SERVICE_ACCOUNT_JSON でファイルパスを指定してください。"
         )
 
     creds = Credentials.from_service_account_file(str(json_path), scopes=GOOGLE_SCOPES)
