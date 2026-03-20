@@ -130,6 +130,17 @@ def setup_fonts() -> tuple[str, bool]:
 
 
 def _find_japanese_font() -> str | None:
+    # リポジトリ同梱フォントを最優先（Streamlit Cloud 対応）
+    local_first = [
+        Path("fonts/NotoSansJP-Regular.ttf"),
+        Path("fonts/ipaexg.ttf"),
+        Path("ipaexg.ttf"),
+    ]
+    for p in local_first:
+        if p.exists():
+            return str(p)
+
+    # システムフォント（ローカル実行時のフォールバック）
     system = platform.system()
     if system == "Windows":
         font_dir = Path("C:/Windows/Fonts")
@@ -148,9 +159,6 @@ def _find_japanese_font() -> str | None:
             "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
         ]
         paths = [Path(p) for p in candidates]
-
-    local = [Path("fonts/NotoSansJP-Regular.ttf"), Path("fonts/ipaexg.ttf"), Path("ipaexg.ttf")]
-    paths.extend(local)
 
     for p in paths:
         if p.exists():

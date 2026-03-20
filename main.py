@@ -97,9 +97,19 @@ OUTPUT_DIR = "reports"
 # ============================================================
 
 def find_japanese_font() -> str | None:
-    """システムから日本語 TTF/TTC フォントを探す。見つからなければ None を返す。"""
-    system = platform.system()
+    """日本語 TTF/TTC フォントを探す。リポジトリ同梱フォントを最優先で確認する。"""
+    # リポジトリ同梱フォントを最優先（Streamlit Cloud / CI 対応）
+    local_first = [
+        Path("fonts/NotoSansJP-Regular.ttf"),
+        Path("fonts/ipaexg.ttf"),
+        Path("ipaexg.ttf"),
+    ]
+    for p in local_first:
+        if p.exists():
+            return str(p)
 
+    # システムフォント（ローカル実行時のフォールバック）
+    system = platform.system()
     if system == "Windows":
         font_dir = Path("C:/Windows/Fonts")
         candidates = ["meiryo.ttc", "msgothic.ttc", "YuGothM.ttc", "YuGothR.ttc", "msmincho.ttc"]
@@ -117,10 +127,6 @@ def find_japanese_font() -> str | None:
             "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
         ]
         paths = [Path(p) for p in candidates]
-
-    # ローカルの fonts フォルダも確認
-    local = [Path("fonts/NotoSansJP-Regular.ttf"), Path("fonts/ipaexg.ttf"), Path("ipaexg.ttf")]
-    paths.extend(local)
 
     for p in paths:
         if p.exists():
