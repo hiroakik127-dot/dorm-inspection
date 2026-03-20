@@ -101,6 +101,7 @@ def find_japanese_font() -> str | None:
     # リポジトリ同梱フォントを最優先（Streamlit Cloud / CI 対応）
     local_first = [
         Path("fonts/NotoSansJP-Regular.ttf"),
+        Path("fonts/NotoSansJP-VariableFont_wght.ttf"),
         Path("fonts/ipaexg.ttf"),
         Path("ipaexg.ttf"),
     ]
