@@ -105,6 +105,12 @@ def setup_fonts() -> tuple[str, bool]:
     """ReportLab と matplotlib 用の日本語フォントを設定する。"""
     font_path = _find_japanese_font()
 
+    # デバッグ: フォントパスを表示（問題解決後に削除可）
+    if font_path:
+        st.info(f"[DEBUG] 日本語フォント: {font_path}")
+    else:
+        st.warning("[DEBUG] 日本語フォントが見つかりませんでした。PDF の日本語が■になります。")
+
     if font_path is None:
         try:
             import japanize_matplotlib  # noqa: F401
@@ -115,7 +121,8 @@ def setup_fonts() -> tuple[str, bool]:
     rl_font_name = "JapaneseFont"
     try:
         pdfmetrics.registerFont(TTFont(rl_font_name, font_path))
-    except Exception:
+    except Exception as e:
+        st.warning(f"[DEBUG] ReportLab フォント登録失敗: {e}")
         rl_font_name = "Helvetica"
 
     try:
@@ -123,15 +130,19 @@ def setup_fonts() -> tuple[str, bool]:
         fp = fm.FontProperties(fname=font_path)
         plt.rcParams["font.family"] = fp.get_name()
         plt.rcParams["axes.unicode_minus"] = False
-    except Exception:
-        pass
+    except Exception as e:
+        st.warning(f"[DEBUG] matplotlib フォント設定失敗: {e}")
 
     return rl_font_name, True
 
 
 def _find_japanese_font() -> str | None:
-    # リポジトリ同梱フォントを最優先（Streamlit Cloud 対応）
+    # app.py があるディレクトリを基準に絶対パスで fonts/ を探す（Streamlit Cloud 対応）
+    base_dir = Path(__file__).parent
     local_first = [
+        base_dir / "fonts" / "NotoSansJP-Regular.ttf",
+        base_dir / "fonts" / "NotoSansJP-VariableFont_wght.ttf",
+        base_dir / "fonts" / "ipaexg.ttf",
         Path("fonts/NotoSansJP-Regular.ttf"),
         Path("fonts/NotoSansJP-VariableFont_wght.ttf"),
         Path("fonts/ipaexg.ttf"),
