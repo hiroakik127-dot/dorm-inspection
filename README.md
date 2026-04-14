@@ -96,6 +96,8 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 
 ```bash
 python main.py
+or
+streamlit run app.py
 ```
 
 起動後、プロンプトが表示されます：
