@@ -57,35 +57,23 @@ pip install -r requirements.txt
 3. サービスアカウントのメールアドレス（JSON ファイル内の `client_email` の値）を
    「閲覧者」として追加
 
-### 4. Anthropic API キーの取得
+### 4. Gemini API キーの取得
 
-1. https://console.anthropic.com/ にログイン
+1. https://aistudio.google.com にログイン
 2. 「API Keys」→「Create Key」
 3. 生成されたキーをコピーしておく
 
 ### 5. 環境変数の設定
 
-#### Windows（PowerShell）
-
-```powershell
-$env:SPREADSHEET_ID = "あなたのスプレッドシートID"
-$env:ANTHROPIC_API_KEY = "sk-ant-..."
-$env:GOOGLE_SERVICE_ACCOUNT_JSON = "service_account.json"  # 省略可
+1：".streamlit"フォルダを"dorm-inspection"フォルダ内に作る
+2：".streamlit"フォルダ内に"secrets.toml"ファイルをメモ帳などで作る
+3：以下を書き込む
+```
+SPREADSHEET_ID = "あなたのスプレッドシートID"
+GEMINI_API_KEY = "あなたのGeminiAPIキー"
+GOOGLE_SERVICE_ACCOUNT_JSON = "service_account.json"
 ```
 
-#### Windows（コマンドプロンプト）
-
-```cmd
-set SPREADSHEET_ID=あなたのスプレッドシートID
-set ANTHROPIC_API_KEY=sk-ant-...
-```
-
-#### Mac / Linux
-
-```bash
-export SPREADSHEET_ID="あなたのスプレッドシートID"
-export ANTHROPIC_API_KEY="sk-ant-..."
-```
 
 **スプレッドシート ID の確認方法：**
 スプレッドシートの URL `https://docs.google.com/spreadsheets/d/【ここがID】/edit` の部分
