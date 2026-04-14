@@ -65,9 +65,9 @@ pip install -r requirements.txt
 
 ### 5. 環境変数の設定
 
-1.".streamlit"フォルダを"dorm-inspection"フォルダ内に作る
-2.".streamlit"フォルダ内に"secrets.toml"ファイルをメモ帳などで作る
-3.以下を書き込む
+1. `.streamlit`フォルダを`dorm-inspection`フォルダ内に作る
+2. `.streamlit`フォルダ内に`secrets.toml`ファイルをメモ帳などで作る
+3. 以下を書き込む
 ```
 SPREADSHEET_ID = "あなたのスプレッドシートID"
 GEMINI_API_KEY = "あなたのGeminiAPIキー"
