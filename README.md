@@ -23,6 +23,7 @@ https://www.python.org/downloads/
 ### 2. ライブラリのインストール
 
 ```bash
+cd Documnets
 cd dorm_inspection
 pip install -r requirements.txt
 ```
